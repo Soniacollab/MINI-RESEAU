@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  php:
+    build: ./docker/php
+    container_name: mini_reseau_php
+    ports:
+      - "8000:8000"   # pour accéder à Symfony
+    volumes:
+      - ./symfony:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mini_reseau_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mini_reseau
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: mini_reseau_phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mini_reseau_mailhog
+    ports:
+      - "8025:8025"
+
+volumes:
+  db_data:

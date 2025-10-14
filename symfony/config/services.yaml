@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    # autowire tous les controllers
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # autowire le reste des services dans src/
+    App\:
+        resource: '../src/'
+        exclude: '../src/{Entity,Migrations,Tests}'

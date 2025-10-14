@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau message{% endblock %}
+
+{% block body %}
+    <h1 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Ajouter un message</h1>
+
+    {% include 'partials/_form.html.twig' with { form: form } %}
+{% endblock %}

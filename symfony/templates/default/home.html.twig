@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue sur Mini-Réseau !</h1>
+
+    <p>Cette page sera la page d'accueil de ton application.</p>
+
+    <a href="{{ path('messages_list') }}">Voir les messages</a>
+{% endblock %}

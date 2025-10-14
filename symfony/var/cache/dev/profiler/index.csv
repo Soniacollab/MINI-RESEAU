@@ -1,0 +1,5 @@
+d6a5fa,172.19.0.1,GET,http://localhost:8000/,1760443340,,200,request
+a4138a,172.19.0.1,GET,http://localhost:8000/favicon.ico,1760443368,64187a,404,request
+64187a,172.19.0.1,GET,http://localhost:8000/favicon.ico,1760443368,,404,request
+66e6ce,172.19.0.1,GET,http://localhost:8000/messages,1760444155,e22b9f,500,request
+e22b9f,172.19.0.1,GET,http://localhost:8000/messages,1760444156,,500,request

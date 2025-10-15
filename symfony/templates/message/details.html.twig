@@ -1,18 +1,66 @@
+{# templates/message/details.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Message #{{ message.id }}{% endblock %}
+{% block title %}Message{% endblock %}
 
 {% block body %}
-    {% include 'message/_card.html.twig' with { message: message } %}
+    <div class="container mx-auto py-6 max-w-2xl">
 
-    <h2 class="text-xl font-semibold mt-6 mb-3 text-gray-800 dark:text-gray-100">Commentaires</h2>
-
-    {% for comment in message.comments %}
-        <div class="border-l-4 border-blue-600 pl-3 mb-2 dark:text-gray-200">
-            <p>{{ comment.content }}</p>
-            <small>par {{ comment.author.firstname }} le {{ comment.createdAt|date('d/m/Y H:i') }}</small>
+        {# Message principal #}
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 mb-6">
+            <div class="flex items-center mb-2">
+                <span class="font-bold">{{ message.author.firstname ~ ' ' ~ message.author.lastname }}</span>
+                <span class="text-gray-500 text-sm ml-2">{{ message.createdAt|date('d/m/Y H:i') }}</span>
+            </div>
+            {% if message.title is defined %}
+                <h2 class="font-semibold text-lg mb-2">{{ message.title }}</h2>
+            {% endif %}
+            <p class="mb-2">{{ message.content }}</p>
+            {% if message.image %}
+                <img src="{{ asset('uploads/' ~ message.image) }}" class="w-full rounded-lg">
+            {% endif %}
         </div>
-    {% else %}
-        <p>Aucun commentaire pour l’instant.</p>
-    {% endfor %}
+
+        {# Formulaire de commentaire #}
+        {% if app.user %}
+            <div class="mb-4">
+                {{ form_start(form) }}
+                <div class="mb-2">
+                    {{ form_widget(form.content, {'attr': {'placeholder': 'Écris un commentaire...', 'rows': 2, 'class': 'w-full border rounded p-2'}}) }}
+                    {{ form_errors(form.content) }}
+                </div>
+                {{ form_row(form.submit) }}
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+
+
+        {# Liste des commentaires #}
+        <div class="space-y-4">
+            {% for comment in message.comments %}
+                <div class="flex items-start space-x-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold">{{ comment.author.firstname ~ ' ' ~ comment.author.lastname }}</span>
+                            <span class="text-gray-500 text-sm">{{ comment.createdAt|date('d/m/Y H:i') }}</span>
+                        </div>
+                        <p>{{ comment.content }}</p>
+
+                        {% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
+                            <div class="mt-1 flex space-x-2 text-sm text-gray-500">
+                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier</a>
+                                <a href="{{ path('comment_delete', {'id': comment.id}) }}"
+                                   class="hover:underline text-red-500"
+                                   onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
+                                    Supprimer
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-gray-500 dark:text-gray-400">Aucun commentaire pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

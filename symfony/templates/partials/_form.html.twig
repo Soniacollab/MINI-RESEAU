@@ -1,17 +1,24 @@
-{{ form_start(form) }}
 <div class="mb-4">
-    {{ form_label(form.content, 'Message') }}
+    {{ form_label(form.content) }}
     {{ form_widget(form.content, {'attr': {'class': 'w-full border rounded p-2'}}) }}
     {{ form_errors(form.content) }}
 </div>
 
 <div class="mb-4">
-    {{ form_label(form.image, 'Image (optionnelle)') }}
-    {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded p-2'}}) }}
+    {{ form_label(form.image) }}
+    {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded p-2', 'onchange': 'previewImage(event)'}}) }}
     {{ form_errors(form.image) }}
 </div>
 
-<button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-    {{ button_label|default('Publier') }}
-</button>
-{{ form_end(form) }}
+<div class="mb-3">
+    <img id="imagePreview"
+         src="{{ message.image ? asset('uploads/messages/' ~ message.image) : '' }}"
+         alt="Prévisualisation"
+         style="max-width:200px; display: {{ message.image ? 'block' : 'none' }}">
+</div>
+<div class="mb-4">
+    {{ form_label(form.title) }}
+    {{ form_widget(form.title, {'attr': {'class': 'w-full border rounded p-2'}}) }}
+    {{ form_errors(form.title) }}
+</div>
+{{ form_row(form.submit) }}

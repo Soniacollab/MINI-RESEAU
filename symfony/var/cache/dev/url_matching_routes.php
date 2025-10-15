@@ -15,8 +15,10 @@ return [
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/xdebug' => [[['_route' => '_profiler_xdebug', '_controller' => 'web_profiler.controller.profiler::xdebugAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
+        '/dashboard' => [[['_route' => 'admin_dashboard', '_controller' => 'App\\Controller\\AdminController::dashboard'], null, ['GET' => 0], null, false, false, null]],
         '/' => [[['_route' => 'default_home', '_controller' => 'App\\Controller\\DefaultController::home'], null, ['GET' => 0], null, false, false, null]],
-        '/messages' => [[['_route' => 'messages_list', '_controller' => 'App\\Controller\\MessageController::displayMessages'], null, null, null, false, false, null]],
+        '/messages' => [[['_route' => 'message_list', '_controller' => 'App\\Controller\\MessageController::listMessages'], null, null, null, true, false, null]],
+        '/messages/add' => [[['_route' => 'message_add', '_controller' => 'App\\Controller\\MessageController::addMessage'], null, null, null, false, false, null]],
         '/page/connexion' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/logout' => [[['_route' => 'app_logout', '_controller' => 'App\\Controller\\SecurityController::logout'], null, null, null, false, false, null]],
         '/page/inscription' => [[['_route' => 'user_register', '_controller' => 'App\\Controller\\UserController::register'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
@@ -41,10 +43,14 @@ return [
                         .')'
                     .')'
                 .')'
-                .'|/message/(?'
-                    .'|([^/]++)(*:222)'
-                    .'|add(*:233)'
-                    .'|([^/]++)/delete(*:256)'
+                .'|/comments/(?'
+                    .'|edit/([^/]++)(*:228)'
+                    .'|delete/([^/]++)(*:251)'
+                .')'
+                .'|/messages/(?'
+                    .'|edit/([^/]++)(*:286)'
+                    .'|delete/([^/]++)(*:309)'
+                    .'|([^/]++)(*:325)'
                 .')'
             .')/?$}sDu',
     ],
@@ -57,10 +63,12 @@ return [
         168 => [[['_route' => '_profiler_exception', '_controller' => 'web_profiler.controller.exception_panel::body'], ['token'], null, null, false, false, null]],
         181 => [[['_route' => '_profiler_exception_css', '_controller' => 'web_profiler.controller.exception_panel::stylesheet'], ['token'], null, null, false, false, null]],
         191 => [[['_route' => '_profiler', '_controller' => 'web_profiler.controller.profiler::panelAction'], ['token'], null, null, false, true, null]],
-        222 => [[['_route' => 'message_show', '_controller' => 'App\\Controller\\MessageController::displayMessageById'], ['id'], null, null, false, true, null]],
-        233 => [[['_route' => 'message_add', '_controller' => 'App\\Controller\\MessageController::addMessage'], [], null, null, false, false, null]],
-        256 => [
-            [['_route' => 'message_delete', '_controller' => 'App\\Controller\\MessageController::deleteMessage'], ['id'], null, null, false, false, null],
+        228 => [[['_route' => 'comment_edit', '_controller' => 'App\\Controller\\CommentController::editComment'], ['id'], null, null, false, true, null]],
+        251 => [[['_route' => 'comment_delete', '_controller' => 'App\\Controller\\CommentController::deleteComment'], ['id'], null, null, false, true, null]],
+        286 => [[['_route' => 'message_edit', '_controller' => 'App\\Controller\\MessageController::editMessage'], ['id'], null, null, false, true, null]],
+        309 => [[['_route' => 'message_delete', '_controller' => 'App\\Controller\\MessageController::deleteMessage'], ['id'], null, null, false, true, null]],
+        325 => [
+            [['_route' => 'message_show', '_controller' => 'App\\Controller\\MessageController::showMessage'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
     ],

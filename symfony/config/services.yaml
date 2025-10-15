@@ -1,7 +1,13 @@
+# config/services.yaml
+
+parameters:
+    # Dossier où seront stockées les images uploadées
+    upload_dir: '%kernel.project_dir%/public/uploads'
+
 services:
     _defaults:
-        autowire: true
-        autoconfigure: true
+        autowire: true      # injecte automatiquement les dépendances
+        autoconfigure: true # ajoute automatiquement les tags nécessaires
         public: false
 
     # autowire tous les controllers
@@ -13,3 +19,8 @@ services:
     App\:
         resource: '../src/'
         exclude: '../src/{Entity,Migrations,Tests}'
+
+    # Service ImageUploader avec injection du chemin des uploads
+    App\Service\ImageUploader:
+        arguments:
+            $uploadDir: '%upload_dir%'

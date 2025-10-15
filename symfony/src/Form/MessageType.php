@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -16,7 +17,12 @@ class MessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // Zone de texte du message
+            ->add('title', TextType::class, [
+                'label' => 'Titre du message',
+                'attr' => [
+                    'placeholder' => 'Titre...',
+                ],
+            ])
             ->add('content', TextareaType::class, [
                 'label' => 'Votre message',
                 'attr' => [
@@ -24,14 +30,13 @@ class MessageType extends AbstractType
                     'rows' => 4,
                 ],
             ])
-
-            // Champ pour l'image (upload)
             ->add('image', FileType::class, [
                 'label' => 'Image (JPG ou PNG)',
-                'mapped' => false, // car ce champ n’est pas directement dans l’entité Message
+                'mapped' => false,
                 'required' => false,
                 'attr' => [
-                    'accept' => 'image/png, image/jpeg'
+                    'accept' => 'image/png, image/jpeg',
+                    'onchange' => 'previewImage(event)' // Pour déclencher la prévisualisation
                 ],
                 'constraints' => [
                     new File([
@@ -41,14 +46,11 @@ class MessageType extends AbstractType
                     ])
                 ],
             ])
-
-            // Bouton d’envoi
             ->add('submit', SubmitType::class, [
                 'label' => 'Publier le message',
-                'attr' => [
-                    'class' => 'btn btn-primary w-100'
-                ]
+                'attr' => ['class' => 'btn btn-primary w-100'],
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

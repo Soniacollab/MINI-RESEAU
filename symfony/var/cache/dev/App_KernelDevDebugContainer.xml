@@ -83,6 +83,7 @@
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
     <parameter key="kernel.container_class">App_KernelDevDebugContainer</parameter>
+    <parameter key="upload_dir">/var/www/html/public/uploads</parameter>
     <parameter key="event_dispatcher.event_aliases" type="collection">
       <parameter key="Symfony\Component\Console\Event\ConsoleCommandEvent">console.command</parameter>
       <parameter key="Symfony\Component\Console\Event\ConsoleErrorEvent">console.error</parameter>
@@ -381,7 +382,13 @@
         <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\AdminController"/>
       </call>
     </service>
-    <service id="App\Controller\CommentController" class="App\Controller\CommentController" autowire="true" autoconfigure="true"/>
+    <service id="App\Controller\CommentController" class="App\Controller\CommentController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.ZyP9f7K.App\Controller\CommentController"/>
+      </call>
+    </service>
     <service id="App\Controller\DefaultController" class="App\Controller\DefaultController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -441,17 +448,8 @@
     <service id="App\Security\AppAuthenticator" class="App\Security\AppAuthenticator" autowire="true" autoconfigure="true">
       <argument type="service" id="router.default"/>
     </service>
-    <service id="App\Service\BookFetcher" class="App\Service\BookFetcher" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="The autoloader expected class &quot;App\Service\BookFetcher&quot; to be defined in file &quot;/var/www/html/vendor/composer/../../src/Service/BookFetcher.php&quot;. The file was found but the class was not in it, the class name or namespace probably has a typo."/>
-    </service>
-    <service id="App\Service\BookManager" class="App\Service\BookManager" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="The autoloader expected class &quot;App\Service\BookManager&quot; to be defined in file &quot;/var/www/html/vendor/composer/../../src/Service/BookManager.php&quot;. The file was found but the class was not in it, the class name or namespace probably has a typo."/>
-    </service>
-    <service id="App\Service\BookSearch" class="App\Service\BookSearch" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="The autoloader expected class &quot;App\Service\BookSearch&quot; to be defined in file &quot;/var/www/html/vendor/composer/../../src/Service/BookSearch.php&quot;. The file was found but the class was not in it, the class name or namespace probably has a typo."/>
-    </service>
     <service id="App\Service\ImageUploader" class="App\Service\ImageUploader" autowire="true" autoconfigure="true">
-      <tag name="container.error" message="Cannot autowire service &quot;App\Service\ImageUploader&quot;: argument &quot;$uploadDir&quot; of method &quot;__construct()&quot; is type-hinted &quot;string&quot;, you should configure its value explicitly."/>
+      <argument>/var/www/html/public/uploads</argument>
     </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
@@ -481,7 +479,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.c2u0zWb"/>
+      <argument type="service" id=".service_locator.xyVmABX"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3525,7 +3523,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.c2u0zWb"/>
+      <argument type="service" id=".service_locator.xyVmABX"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -7800,7 +7798,11 @@
     </service>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" abstract="true"/>
+    <service id=".instanceof.App\Controller\AdminController.0.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\AdminController" class="App\Controller\AdminController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\CommentController" class="App\Controller\CommentController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\CommentController" class="App\Controller\CommentController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\CommentController" class="App\Controller\CommentController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" abstract="true"/>
     <service id=".instanceof.App\Controller\DefaultController.0.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" abstract="true"/>
@@ -8410,15 +8412,40 @@
         <argument key="messageRepository" type="service_closure" id="App\Repository\MessageRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessages()" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\MessageController::displayMessages()"/>
-      <argument>App\Controller\MessageController::displayMessages()</argument>
+    <service id=".service_locator.LJyXIf_.App\Controller\AdminController::dashboard()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\AdminController::dashboard()"/>
+      <argument>App\Controller\AdminController::dashboard()</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.LJyXIf_" method="withContext"/>
     </service>
-    <service id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessageById()" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\MessageController::displayMessageById()"/>
-      <argument>App\Controller\MessageController::displayMessageById()</argument>
+    <service id=".service_locator.aCnRYOo" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="comment" type="service_closure" id=".errored..service_locator.aCnRYOo.App\Entity\Comment"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.aCnRYOo.App\Controller\CommentController::editComment()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\CommentController::editComment()"/>
+      <argument>App\Controller\CommentController::editComment()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.aCnRYOo" method="withContext"/>
+    </service>
+    <service id=".service_locator.aCnRYOo.App\Controller\CommentController::deleteComment()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\CommentController::deleteComment()"/>
+      <argument>App\Controller\CommentController::deleteComment()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.aCnRYOo" method="withContext"/>
+    </service>
+    <service id=".service_locator.LJyXIf_.App\Controller\DefaultController::home()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\DefaultController::home()"/>
+      <argument>App\Controller\DefaultController::home()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.LJyXIf_" method="withContext"/>
+    </service>
+    <service id=".service_locator.LJyXIf_.App\Controller\MessageController::listMessages()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\MessageController::listMessages()"/>
+      <argument>App\Controller\MessageController::listMessages()</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.LJyXIf_" method="withContext"/>
     </service>
@@ -8435,19 +8462,38 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.Xb9mHdy" method="withContext"/>
     </service>
-    <service id=".service_locator.ALnIiFA" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.z4NEXML" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="messageRepository" type="service_closure" id="App\Repository\MessageRepository"/>
-        <argument key="imageUploader" type="service_closure" id="App\Service\ImageUploader"/>
+        <argument key="message" type="service_closure" id=".errored..service_locator.z4NEXML.App\Entity\Message"/>
         <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="imageUploader" type="service_closure" id="App\Service\ImageUploader"/>
       </argument>
     </service>
-    <service id=".service_locator.ALnIiFA.App\Controller\MessageController::deleteMessage()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.z4NEXML.App\Controller\MessageController::editMessage()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\MessageController::editMessage()"/>
+      <argument>App\Controller\MessageController::editMessage()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.z4NEXML" method="withContext"/>
+    </service>
+    <service id=".service_locator.z4NEXML.App\Controller\MessageController::deleteMessage()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\MessageController::deleteMessage()"/>
       <argument>App\Controller\MessageController::deleteMessage()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.ALnIiFA" method="withContext"/>
+      <factory service=".service_locator.z4NEXML" method="withContext"/>
+    </service>
+    <service id=".service_locator.ewkxUgM" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="message" type="service_closure" id=".errored..service_locator.ewkxUgM.App\Entity\Message"/>
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.ewkxUgM.App\Controller\MessageController::showMessage()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\MessageController::showMessage()"/>
+      <argument>App\Controller\MessageController::showMessage()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ewkxUgM" method="withContext"/>
     </service>
     <service id=".service_locator.3QECKYg" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -8474,25 +8520,35 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.A84gqGd" method="withContext"/>
     </service>
-    <service id=".service_locator.c2u0zWb" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.xyVmABX" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
-        <argument key="App\Controller\MessageController::displayMessages" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessages()"/>
-        <argument key="App\Controller\MessageController::displayMessageById" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessageById()"/>
+        <argument key="App\Controller\AdminController::dashboard" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\AdminController::dashboard()"/>
+        <argument key="App\Controller\CommentController::editComment" type="service_closure" id=".service_locator.aCnRYOo.App\Controller\CommentController::editComment()"/>
+        <argument key="App\Controller\CommentController::deleteComment" type="service_closure" id=".service_locator.aCnRYOo.App\Controller\CommentController::deleteComment()"/>
+        <argument key="App\Controller\DefaultController::home" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\DefaultController::home()"/>
+        <argument key="App\Controller\MessageController::listMessages" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::listMessages()"/>
         <argument key="App\Controller\MessageController::addMessage" type="service_closure" id=".service_locator.Xb9mHdy.App\Controller\MessageController::addMessage()"/>
-        <argument key="App\Controller\MessageController::deleteMessage" type="service_closure" id=".service_locator.ALnIiFA.App\Controller\MessageController::deleteMessage()"/>
+        <argument key="App\Controller\MessageController::editMessage" type="service_closure" id=".service_locator.z4NEXML.App\Controller\MessageController::editMessage()"/>
+        <argument key="App\Controller\MessageController::deleteMessage" type="service_closure" id=".service_locator.z4NEXML.App\Controller\MessageController::deleteMessage()"/>
+        <argument key="App\Controller\MessageController::showMessage" type="service_closure" id=".service_locator.ewkxUgM.App\Controller\MessageController::showMessage()"/>
         <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.3QECKYg.App\Controller\SecurityController::login()"/>
         <argument key="App\Controller\UserController::register" type="service_closure" id=".service_locator.A84gqGd.App\Controller\UserController::register()"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.zHyJIs5.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.zHyJIs5.kernel::loadRoutes()"/>
-        <argument key="App\Controller\MessageController:displayMessages" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessages()"/>
-        <argument key="App\Controller\MessageController:displayMessageById" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::displayMessageById()"/>
+        <argument key="App\Controller\AdminController:dashboard" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\AdminController::dashboard()"/>
+        <argument key="App\Controller\CommentController:editComment" type="service_closure" id=".service_locator.aCnRYOo.App\Controller\CommentController::editComment()"/>
+        <argument key="App\Controller\CommentController:deleteComment" type="service_closure" id=".service_locator.aCnRYOo.App\Controller\CommentController::deleteComment()"/>
+        <argument key="App\Controller\DefaultController:home" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\DefaultController::home()"/>
+        <argument key="App\Controller\MessageController:listMessages" type="service_closure" id=".service_locator.LJyXIf_.App\Controller\MessageController::listMessages()"/>
         <argument key="App\Controller\MessageController:addMessage" type="service_closure" id=".service_locator.Xb9mHdy.App\Controller\MessageController::addMessage()"/>
-        <argument key="App\Controller\MessageController:deleteMessage" type="service_closure" id=".service_locator.ALnIiFA.App\Controller\MessageController::deleteMessage()"/>
+        <argument key="App\Controller\MessageController:editMessage" type="service_closure" id=".service_locator.z4NEXML.App\Controller\MessageController::editMessage()"/>
+        <argument key="App\Controller\MessageController:deleteMessage" type="service_closure" id=".service_locator.z4NEXML.App\Controller\MessageController::deleteMessage()"/>
+        <argument key="App\Controller\MessageController:showMessage" type="service_closure" id=".service_locator.ewkxUgM.App\Controller\MessageController::showMessage()"/>
         <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.3QECKYg.App\Controller\SecurityController::login()"/>
         <argument key="App\Controller\UserController:register" type="service_closure" id=".service_locator.A84gqGd.App\Controller\UserController::register()"/>
       </argument>
@@ -9088,6 +9144,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.ZyP9f7K" method="withContext"/>
     </service>
+    <service id=".service_locator.ZyP9f7K.App\Controller\CommentController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\CommentController"/>
+      <argument>App\Controller\CommentController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.ZyP9f7K" method="withContext"/>
+    </service>
     <service id=".service_locator.ZyP9f7K.App\Controller\DefaultController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\DefaultController"/>
       <argument>App\Controller\DefaultController</argument>
@@ -9311,6 +9373,7 @@
         <argument type="collection">
           <argument>App\Kernel</argument>
           <argument>App\Controller\AdminController</argument>
+          <argument>App\Controller\CommentController</argument>
           <argument>App\Controller\DefaultController</argument>
           <argument>App\Controller\MessageController</argument>
           <argument>App\Controller\SecurityController</argument>
@@ -9545,6 +9608,15 @@
     </service>
     <service id=".errored..service_locator.zHyJIs5.Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.zHyJIs5&quot;: it needs an instance of &quot;Symfony\Component\Config\Loader\LoaderInterface&quot; but this type has been excluded from autowiring."/>
+    </service>
+    <service id=".errored..service_locator.aCnRYOo.App\Entity\Comment" class="App\Entity\Comment">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.aCnRYOo&quot;: it needs an instance of &quot;App\Entity\Comment&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    </service>
+    <service id=".errored..service_locator.z4NEXML.App\Entity\Message" class="App\Entity\Message">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.z4NEXML&quot;: it needs an instance of &quot;App\Entity\Message&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    </service>
+    <service id=".errored..service_locator.ewkxUgM.App\Entity\Message" class="App\Entity\Message">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.ewkxUgM&quot;: it needs an instance of &quot;App\Entity\Message&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".console.command.about.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>about</argument>
@@ -10761,7 +10833,7 @@
     <service id="Psr\Log\LoggerInterface" alias="monolog.logger"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.c2u0zWb"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.xyVmABX"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10806,8 +10878,10 @@
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.n_ENPtW" alias=".service_locator.zHyJIs5"/>
     <service id=".service_locator.jdtUAh4" alias=".service_locator.LJyXIf_"/>
+    <service id=".service_locator.YeMyYsQ" alias=".service_locator.aCnRYOo"/>
     <service id=".service_locator.ewWK4xL" alias=".service_locator.Xb9mHdy"/>
-    <service id=".service_locator.paqsNho" alias=".service_locator.ALnIiFA"/>
+    <service id=".service_locator.fHovvAS" alias=".service_locator.z4NEXML"/>
+    <service id=".service_locator.xOQ4zvI" alias=".service_locator.ewkxUgM"/>
     <service id=".service_locator.Nrz07Zz" alias=".service_locator.3QECKYg"/>
     <service id=".service_locator.navQAVH" alias=".service_locator.A84gqGd"/>
     <service id=".service_locator.9nvaCmp" alias=".service_locator.ZyP9f7K"/>

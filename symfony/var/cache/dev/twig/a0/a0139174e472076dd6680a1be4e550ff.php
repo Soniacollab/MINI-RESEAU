@@ -14,7 +14,7 @@ use Twig\Source;
 use Twig\Template;
 use Twig\TemplateWrapper;
 
-/* message/edit.html.twig */
+/* message/add.html.twig */
 class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
 {
     private Source $source;
@@ -46,17 +46,17 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
     {
         $macros = $this->macros;
         $__internal_5a27a8ba21ca79b61932376b2fa922d2 = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
-        $__internal_5a27a8ba21ca79b61932376b2fa922d2->enter($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "message/edit.html.twig"));
+        $__internal_5a27a8ba21ca79b61932376b2fa922d2->enter($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "message/add.html.twig"));
 
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "message/edit.html.twig"));
+        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "message/add.html.twig"));
 
         $this->parent = $this->load("base.html.twig", 1);
         yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
-
+        
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
 
-
+        
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
     }
@@ -74,17 +74,21 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "title"));
 
-        yield "Publier un message";
-
+        // line 4
+        yield "    ";
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 4, $this->source); })()), "id", [], "any", false, false, false, 4)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("Modifier le message") : ("Publier un message"));
+        yield "
+";
+        
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
-
+        
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
 
         yield from [];
     }
 
-    // line 5
+    // line 7
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -97,7 +101,7 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 6
+        // line 8
         yield "    ";
         yield from $this->yieldParentBlock("javascripts", $context, $blocks);
         yield "
@@ -121,16 +125,16 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
         });
     </script>
 ";
-
+        
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
-
+        
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
 
         yield from [];
     }
 
-    // line 28
+    // line 30
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -143,28 +147,34 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
-        // line 29
+        // line 31
         yield "    <div class=\"container py-5\">
         <div class=\"col-8 mx-auto\">
-            <h1 class=\"text-2xl font-bold mb-4\">Ajouter un message</h1>
+            <h1 class=\"text-2xl font-bold mb-4\">
+                ";
+        // line 34
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 34, $this->source); })()), "id", [], "any", false, false, false, 34)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("Modifier le message") : ("Publier un message"));
+        yield "
+            </h1>
+
             ";
-        // line 32
-        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 32, $this->source); })()), 'form_start');
+        // line 37
+        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 37, $this->source); })()), 'form_start');
         yield "
             ";
-        // line 33
-        yield from $this->load("partials/_form.html.twig", 33)->unwrap()->yield(CoreExtension::merge($context, ["form" => (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 33, $this->source); })()), "message" => (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 33, $this->source); })())]));
-        // line 34
+        // line 38
+        yield from $this->load("partials/_form.html.twig", 38)->unwrap()->yield(CoreExtension::merge($context, ["form" => (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 38, $this->source); })()), "message" => (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 38, $this->source); })())]));
+        // line 39
         yield "            ";
-        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 34, $this->source); })()), 'form_end');
+        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 39, $this->source); })()), 'form_end');
         yield "
         </div>
     </div>
 ";
-
+        
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
-
+        
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
 
         yield from [];
@@ -175,7 +185,7 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
      */
     public function getTemplateName(): string
     {
-        return "message/edit.html.twig";
+        return "message/add.html.twig";
     }
 
     /**
@@ -191,14 +201,16 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  158 => 34,  156 => 33,  152 => 32,  147 => 29,  134 => 28,  101 => 6,  88 => 5,  65 => 3,  42 => 1,);
+        return array (  168 => 39,  166 => 38,  162 => 37,  156 => 34,  151 => 31,  138 => 30,  105 => 8,  92 => 7,  78 => 4,  65 => 3,  42 => 1,);
     }
 
     public function getSourceContext(): Source
     {
         return new Source("{% extends 'base.html.twig' %}
 
-{% block title %}Publier un message{% endblock %}
+{% block title %}
+    {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -226,13 +238,16 @@ class __TwigTemplate_02452d0748e9d6c607cb4aa4303d411d extends Template
 {% block body %}
     <div class=\"container py-5\">
         <div class=\"col-8 mx-auto\">
-            <h1 class=\"text-2xl font-bold mb-4\">Ajouter un message</h1>
+            <h1 class=\"text-2xl font-bold mb-4\">
+                {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+            </h1>
+
             {{ form_start(form) }}
             {% include 'partials/_form.html.twig' with { form: form, message: message } %}
             {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
-", "message/edit.html.twig", "/var/www/html/templates/message/edit.html.twig");
+", "message/add.html.twig", "/var/www/html/templates/message/add.html.twig");
     }
 }

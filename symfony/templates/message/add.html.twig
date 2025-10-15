@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Publier un message{% endblock %}
+{% block title %}
+    {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -28,7 +30,10 @@
 {% block body %}
     <div class="container py-5">
         <div class="col-8 mx-auto">
-            <h1 class="text-2xl font-bold mb-4">Ajouter un message</h1>
+            <h1 class="text-2xl font-bold mb-4">
+                {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+            </h1>
+
             {{ form_start(form) }}
             {% include 'partials/_form.html.twig' with { form: form, message: message } %}
             {{ form_end(form) }}

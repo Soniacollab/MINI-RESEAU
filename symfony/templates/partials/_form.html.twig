@@ -1,24 +1,21 @@
-<div class="mb-4">
-    {{ form_label(form.content) }}
-    {{ form_widget(form.content, {'attr': {'class': 'w-full border rounded p-2'}}) }}
+<div class="mb-3">
+    {{ form_label(form.content, 'Contenu du message') }}
+    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Exprimez-vous...'}}) }}
     {{ form_errors(form.content) }}
 </div>
 
-<div class="mb-4">
-    {{ form_label(form.image) }}
-    {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded p-2', 'onchange': 'previewImage(event)'}}) }}
+<div class="mb-3">
+    {{ form_label(form.image, 'Image (optionnelle)') }}
+    {{ form_widget(form.image, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
     {{ form_errors(form.image) }}
+
+    {% if message.image %}
+        <div class="mt-2">
+            <img src="{{ asset('uploads/' ~ message.image) }}" alt="Image actuelle" class="img-thumbnail" style="max-width: 200px;">
+        </div>
+    {% endif %}
+
+    <img id="imagePreview" src="" alt="Aperçu de l’image" class="img-thumbnail mt-2" style="max-width: 200px; display:none;">
 </div>
 
-<div class="mb-3">
-    <img id="imagePreview"
-         src="{{ message.image ? asset('uploads/messages/' ~ message.image) : '' }}"
-         alt="Prévisualisation"
-         style="max-width:200px; display: {{ message.image ? 'block' : 'none' }}">
-</div>
-<div class="mb-4">
-    {{ form_label(form.title) }}
-    {{ form_widget(form.title, {'attr': {'class': 'w-full border rounded p-2'}}) }}
-    {{ form_errors(form.title) }}
-</div>
-{{ form_row(form.submit) }}
+

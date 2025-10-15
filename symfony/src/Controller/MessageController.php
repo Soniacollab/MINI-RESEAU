@@ -74,7 +74,7 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('message_list');
         }
 
-        return $this->render('message/edit.html.twig', [
+        return $this->render('message/add.html.twig', [
             'form' => $form->createView(),
             'message' => $message,
         ]);
@@ -106,7 +106,7 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('message_list');
         }
 
-        return $this->render('message/edit.html.twig', [
+        return $this->render('message/add.html.twig', [
             'form' => $form->createView(),
             'message' => $message,
         ]);

@@ -45,14 +45,14 @@ class __TwigTemplate_d4c9fef9b14a6503d88bd32326f25693 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "partials/_form.html.twig"));
 
         // line 1
-        yield "<div class=\"mb-4\">
+        yield "<div class=\"mb-3\">
     ";
         // line 2
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 2, $this->source); })()), "content", [], "any", false, false, false, 2), 'label');
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 2, $this->source); })()), "content", [], "any", false, false, false, 2), 'label', ["label" => "Contenu du message"]);
         yield "
     ";
         // line 3
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 3, $this->source); })()), "content", [], "any", false, false, false, 3), 'widget', ["attr" => ["class" => "w-full border rounded p-2"]]);
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 3, $this->source); })()), "content", [], "any", false, false, false, 3), 'widget', ["attr" => ["class" => "form-control", "placeholder" => "Exprimez-vous..."]]);
         yield "
     ";
         // line 4
@@ -60,51 +60,38 @@ class __TwigTemplate_d4c9fef9b14a6503d88bd32326f25693 extends Template
         yield "
 </div>
 
-<div class=\"mb-4\">
+<div class=\"mb-3\">
     ";
         // line 8
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 8, $this->source); })()), "image", [], "any", false, false, false, 8), 'label');
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 8, $this->source); })()), "image", [], "any", false, false, false, 8), 'label', ["label" => "Image (optionnelle)"]);
         yield "
     ";
         // line 9
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 9, $this->source); })()), "image", [], "any", false, false, false, 9), 'widget', ["attr" => ["class" => "w-full border rounded p-2", "onchange" => "previewImage(event)"]]);
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 9, $this->source); })()), "image", [], "any", false, false, false, 9), 'widget', ["attr" => ["class" => "form-control", "onchange" => "previewImage(event)"]]);
         yield "
     ";
         // line 10
         yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 10, $this->source); })()), "image", [], "any", false, false, false, 10), 'errors');
         yield "
+
+    ";
+        // line 12
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 12, $this->source); })()), "image", [], "any", false, false, false, 12)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 13
+            yield "        <div class=\"mt-2\">
+            <img src=\"";
+            // line 14
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl(("uploads/" . CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 14, $this->source); })()), "image", [], "any", false, false, false, 14))), "html", null, true);
+            yield "\" alt=\"Image actuelle\" class=\"img-thumbnail\" style=\"max-width: 200px;\">
+        </div>
+    ";
+        }
+        // line 17
+        yield "
+    <img id=\"imagePreview\" src=\"\" alt=\"Aperçu de l’image\" class=\"img-thumbnail mt-2\" style=\"max-width: 200px; display:none;\">
 </div>
 
-<div class=\"mb-3\">
-    <img id=\"imagePreview\"
-         src=\"";
-        // line 15
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 15, $this->source); })()), "image", [], "any", false, false, false, 15)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl(("uploads/messages/" . CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 15, $this->source); })()), "image", [], "any", false, false, false, 15))), "html", null, true)) : (""));
-        yield "\"
-         alt=\"Prévisualisation\"
-         style=\"max-width:200px; display: ";
-        // line 17
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["message"]) || array_key_exists("message", $context) ? $context["message"] : (function () { throw new RuntimeError('Variable "message" does not exist.', 17, $this->source); })()), "image", [], "any", false, false, false, 17)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ("block") : ("none"));
-        yield "\">
-</div>
-<div class=\"mb-4\">
-    ";
-        // line 20
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 20, $this->source); })()), "title", [], "any", false, false, false, 20), 'label');
-        yield "
-    ";
-        // line 21
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 21, $this->source); })()), "title", [], "any", false, false, false, 21), 'widget', ["attr" => ["class" => "w-full border rounded p-2"]]);
-        yield "
-    ";
-        // line 22
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 22, $this->source); })()), "title", [], "any", false, false, false, 22), 'errors');
-        yield "
-</div>
-";
-        // line 24
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 24, $this->source); })()), "submit", [], "any", false, false, false, 24), 'row');
-        yield "
+
 ";
         
         $__internal_5a27a8ba21ca79b61932376b2fa922d2->leave($__internal_5a27a8ba21ca79b61932376b2fa922d2_prof);
@@ -136,35 +123,32 @@ class __TwigTemplate_d4c9fef9b14a6503d88bd32326f25693 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  106 => 24,  101 => 22,  97 => 21,  93 => 20,  87 => 17,  82 => 15,  74 => 10,  70 => 9,  66 => 8,  59 => 4,  55 => 3,  51 => 2,  48 => 1,);
+        return array (  90 => 17,  84 => 14,  81 => 13,  79 => 12,  74 => 10,  70 => 9,  66 => 8,  59 => 4,  55 => 3,  51 => 2,  48 => 1,);
     }
 
     public function getSourceContext(): Source
     {
-        return new Source("<div class=\"mb-4\">
-    {{ form_label(form.content) }}
-    {{ form_widget(form.content, {'attr': {'class': 'w-full border rounded p-2'}}) }}
+        return new Source("<div class=\"mb-3\">
+    {{ form_label(form.content, 'Contenu du message') }}
+    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Exprimez-vous...'}}) }}
     {{ form_errors(form.content) }}
 </div>
 
-<div class=\"mb-4\">
-    {{ form_label(form.image) }}
-    {{ form_widget(form.image, {'attr': {'class': 'w-full border rounded p-2', 'onchange': 'previewImage(event)'}}) }}
+<div class=\"mb-3\">
+    {{ form_label(form.image, 'Image (optionnelle)') }}
+    {{ form_widget(form.image, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
     {{ form_errors(form.image) }}
+
+    {% if message.image %}
+        <div class=\"mt-2\">
+            <img src=\"{{ asset('uploads/' ~ message.image) }}\" alt=\"Image actuelle\" class=\"img-thumbnail\" style=\"max-width: 200px;\">
+        </div>
+    {% endif %}
+
+    <img id=\"imagePreview\" src=\"\" alt=\"Aperçu de l’image\" class=\"img-thumbnail mt-2\" style=\"max-width: 200px; display:none;\">
 </div>
 
-<div class=\"mb-3\">
-    <img id=\"imagePreview\"
-         src=\"{{ message.image ? asset('uploads/messages/' ~ message.image) : '' }}\"
-         alt=\"Prévisualisation\"
-         style=\"max-width:200px; display: {{ message.image ? 'block' : 'none' }}\">
-</div>
-<div class=\"mb-4\">
-    {{ form_label(form.title) }}
-    {{ form_widget(form.title, {'attr': {'class': 'w-full border rounded p-2'}}) }}
-    {{ form_errors(form.title) }}
-</div>
-{{ form_row(form.submit) }}
+
 ", "partials/_form.html.twig", "/var/www/html/templates/partials/_form.html.twig");
     }
 }

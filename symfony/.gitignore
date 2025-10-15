@@ -1,1 +1,2 @@
 /vendor/
+symfony/var/log/*.log

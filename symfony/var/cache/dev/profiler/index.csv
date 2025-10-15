@@ -39,3 +39,7 @@ cfa2e9,172.18.0.1,GET,http://localhost:8000/messages/uploads/https://placehold.c
 e0d3e4,172.18.0.1,GET,http://localhost:8000/messages/edit/11,1760515436,,200,request
 e9038f,172.18.0.1,POST,http://localhost:8000/messages/edit/11,1760515469,,302,request
 42e6c2,172.18.0.1,GET,http://localhost:8000/messages/,1760515486,,200,request
+0a21d8,172.18.0.1,GET,http://localhost:8000/messages/uploads/https://placehold.co/600x400,1760515712,159477,404,request
+159477,172.18.0.1,GET,http://localhost:8000/messages/uploads/https://placehold.co/600x400,1760515715,,404,request
+3aeef6,172.18.0.1,GET,http://localhost:8000/logout,1760515806,,302,request
+6527a8,172.18.0.1,GET,http://localhost:8000/,1760515828,,200,request

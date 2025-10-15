@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
@@ -16,7 +17,18 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez saisir un titre.')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.'
+    )]
+    private ?string $title = null;
+
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Vous devez saisir le contenu du message.')]
     private ?string $content = null;
 
     #[ORM\Column]
@@ -26,17 +38,11 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    /**
-     * @var Collection<int, Comment>
-     */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'message')]
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
 
     public function __construct()
     {
@@ -48,6 +54,17 @@ class Message
         return $this->id;
     }
 
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
     public function getContent(): ?string
     {
         return $this->content;
@@ -56,7 +73,6 @@ class Message
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -68,7 +84,6 @@ class Message
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -80,7 +95,6 @@ class Message
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
-
         return $this;
     }
 
@@ -89,7 +103,9 @@ class Message
      */
     public function getComments(): Collection
     {
-        return $this->comments;
+        // Retourne les commentaires triés par createdAt décroissant
+        return $this->comments->toArray() ?
+            $this->comments->toArray() : new ArrayCollection();
     }
 
     public function addComment(Comment $comment): static
@@ -105,7 +121,6 @@ class Message
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
             if ($comment->getMessage() === $this) {
                 $comment->setMessage(null);
             }
@@ -122,19 +137,6 @@ class Message
     public function setImage(?string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
         return $this;
     }
 }

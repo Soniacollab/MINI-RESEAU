@@ -40,7 +40,7 @@ class MessageType extends AbstractType
                 ],
                 'constraints' => [
                     new File([
-                        'maxSize' => '2M',
+                        'maxSize' => '5M',
                         'mimeTypes' => ['image/jpeg', 'image/png'],
                         'mimeTypesMessage' => 'Veuillez uploader une image au format JPG ou PNG.',
                     ])

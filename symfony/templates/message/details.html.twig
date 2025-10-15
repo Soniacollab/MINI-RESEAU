@@ -37,7 +37,7 @@
 
         {# Liste des commentaires #}
         <div class="space-y-4">
-            {% for comment in message.comments %}
+            {% for comment in comments %}
                 <div class="flex items-start space-x-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
                     <div class="flex-1">
                         <div class="flex justify-between items-center mb-1">
@@ -46,17 +46,19 @@
                         </div>
                         <p>{{ comment.content }}</p>
 
-                        {% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
-                            <div class="mt-1 flex space-x-2 text-sm text-gray-500">
+                        <div class="mt-1 flex space-x-2 text-sm text-gray-500">
+                            {% if app.user and (app.user.id == comment.author.id) %}
+                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier</a>
+                            {% endif %}
 
-                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier le commentaire</a>
+                            {% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
                                 <a href="{{ path('comment_delete', {'id': comment.id}) }}"
                                    class="hover:underline text-red-500"
                                    onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
                                     Supprimer
                                 </a>
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% else %}

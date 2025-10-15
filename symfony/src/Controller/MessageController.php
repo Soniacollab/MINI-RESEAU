@@ -40,7 +40,7 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $messages = $messageRepository->findAll();
+        $messages = $messageRepository->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('message/message.html.twig', [
             'messages' => $messages,
@@ -131,21 +131,21 @@ class MessageController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function showMessage(Message $message, Request $request, EntityManagerInterface $em): Response
+    public function showMessage(Message $message, Request $request, EntityManagerInterface $em, \App\Repository\CommentRepository $commentRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
 
+        // Création du formulaire pour ajouter un commentaire
         $comment = new Comment();
         $comment->setAuthor($this->getUser());
         $comment->setMessage($message);
-
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setCreatedAt(new DateTimeImmutable());
+            $comment->setCreatedAt(new \DateTimeImmutable());
             $em->persist($comment);
             $em->flush();
 
@@ -154,9 +154,13 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('message_show', ['id' => $message->getId()]);
         }
 
+        // Récupérer les commentaires triés par date décroissante
+        $comments = $commentRepository->findBy(['message' => $message], ['createdAt' => 'DESC']);
+
         return $this->render('message/details.html.twig', [
             'message' => $message,
             'form' => $form->createView(),
+            'comments' => $comments,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +31,7 @@ class CommentController extends AbstractController
     // ✏️ Modifier un commentaire
     #[Route('/edit/{id}', name: 'edit')]
     #[IsGranted('ROLE_USER')]
-    public function editComment(Comment $comment, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function editComment(Comment $comment, CommentRepository $commentRepository, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $this->denyAccessIfNotOwnerOrAdmin($comment);
 
@@ -45,6 +46,9 @@ class CommentController extends AbstractController
                 'id' => $comment->getMessage()->getId()
             ]);
         }
+
+        // Récupérer les commentaires triés par date décroissante
+        $comments = $commentRepository->findBy(['message' => $message], ['createdAt' => 'DESC']);
 
         // 👉 Affiche le formulaire si pas encore soumis
         return $this->render('comment/edit.html.twig', [

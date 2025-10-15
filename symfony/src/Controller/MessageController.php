@@ -40,7 +40,7 @@ class MessageController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $messages = $messageRepository->findAll();
+        $messages = $messageRepository->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('message/message.html.twig', [
             'messages' => $messages,

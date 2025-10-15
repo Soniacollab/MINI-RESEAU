@@ -48,7 +48,8 @@
 
                         {% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
                             <div class="mt-1 flex space-x-2 text-sm text-gray-500">
-                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier</a>
+
+                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier le commentaire</a>
                                 <a href="{{ path('comment_delete', {'id': comment.id}) }}"
                                    class="hover:underline text-red-500"
                                    onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">

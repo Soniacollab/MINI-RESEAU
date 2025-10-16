@@ -1,69 +1,70 @@
 {# templates/message/details.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Message{% endblock %}
+{% block title %}Message
+{% endblock %}
 
 {% block body %}
-    <div class="container mx-auto py-6 max-w-2xl">
+	<div class="dark:bg-gray-700 dark:text-gray-100">
+		<div class="mx-auto px-2 py-6 max-w-2xl">
 
-        {# Message principal #}
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 mb-6">
-            <div class="flex items-center mb-2">
-                <span class="font-bold">{{ message.author.firstname ~ ' ' ~ message.author.lastname }}</span>
-                <span class="text-gray-500 text-sm ml-2">{{ message.createdAt|date('d/m/Y H:i') }}</span>
-            </div>
-            {% if message.title is defined %}
-                <h2 class="font-semibold text-lg mb-2">{{ message.title }}</h2>
-            {% endif %}
-            <p class="mb-2">{{ message.content }}</p>
-            {% if message.image %}
-                <img src="{{ asset('uploads/' ~ message.image) }}" class="w-full rounded-lg">
-            {% endif %}
-        </div>
+			{# Message principal #}
+			<div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 mb-6">
+				<div class="flex items-center mb-2">
+					<span class="font-bold">{{ message.author.firstname ~ ' ' ~ message.author.lastname }}</span>
+					<span class="text-gray-500 text-sm ml-2">{{ message.createdAt|date('d/m/Y H:i') }}</span>
+				</div>
+				{% if message.title is defined %}
+					<h2 class="font-semibold text-lg mb-2">{{ message.title }}</h2>
+				{% endif %}
+				<p class="mb-2">{{ message.content }}</p>
+				{% if message.image %}
+					<img src="{{ asset('uploads/' ~ message.image) }}" class="mx-auto w-2/4 rounded-lg">
+				{% endif %}
+			</div>
 
-        {# Formulaire de commentaire #}
-        {% if app.user %}
-            <div class="mb-4">
-                {{ form_start(form) }}
-                <div class="mb-2">
-                    {{ form_widget(form.content, {'attr': {'placeholder': 'Écris un commentaire...', 'rows': 2, 'class': 'w-full border rounded p-2'}}) }}
-                    {{ form_errors(form.content) }}
-                </div>
-                {{ form_row(form.submit) }}
-                {{ form_end(form) }}
-            </div>
-        {% endif %}
+			{# Formulaire de commentaire #}
+			{% if app.user %}
+				<div class="mb-4">
+					{{ form_start(form) }}
+					<div class="mb-2">
+						{{ form_widget(form.content, {'attr': {'placeholder': 'Écris un commentaire...', 'rows': 2, 'class': 'w-full border rounded p-2 dark:bg-gray-800 dark:text-gray-100'}}) }}
+						{{ form_errors(form.content) }}
+					</div>
+					{{ form_widget(form.submit, {'attr': {'class': 'bg-purple-300 shadow-lg rounded-md px-4 py-2 w-full hover:bg-purple-500 dark:text-black'}}) }}
+					{{ form_end(form) }}
+				</div>
+			{% endif %}
 
 
-        {# Liste des commentaires #}
-        <div class="space-y-4">
-            {% for comment in message.comments %}
-                <div class="flex items-start space-x-3 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold">{{ comment.author.firstname ~ ' ' ~ comment.author.lastname }}</span>
-                            <span class="text-gray-500 text-sm">{{ comment.createdAt|date('d/m/Y H:i') }}</span>
-                        </div>
-                        <p>{{ comment.content }}</p>
+			{# Liste des commentaires #}
+			<div class="space-y-4">
+				{% for comment in message.comments %}
+					<div class="flex items-start space-x-3 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">
+						<div class="flex-1">
+							<div class="flex justify-between items-center mb-1">
+								<span class="font-bold">{{ comment.author.firstname ~ ' ' ~ comment.author.lastname }}</span>
+								<span class="text-gray-500 text-sm">{{ comment.createdAt|date('d/m/Y H:i') }}</span>
+							</div>
+							<p>{{ comment.content }}</p>
 
-                        <div class="mt-1 flex space-x-2 text-sm text-gray-500">
-                            {% if app.user and (app.user.id == comment.author.id) %}
-                                <a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier</a>
-                            {% endif %}
+							<div class="mt-1 flex space-x-2 text-sm text-gray-500">
+								{% if app.user and (app.user.id == comment.author.id) %}
+									<a href="{{ path('comment_edit', {'id': comment.id}) }}" class="hover:underline">Modifier</a>
+								{% endif %}
 
-                            {% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
-                                <a href="{{ path('comment_delete', {'id': comment.id}) }}"
-                                   class="hover:underline text-red-500"
-                                   onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
-                                    Supprimer
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <p class="text-gray-500 dark:text-gray-400">Aucun commentaire pour le moment.</p>
-            {% endfor %}
-        </div>
-    </div>
+								{% if app.user and (app.user.id == comment.author.id or is_granted('ROLE_ADMIN')) %}
+									<a href="{{ path('comment_delete', {'id': comment.id}) }}" class="hover:underline text-red-500" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
+										Supprimer
+									</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<p class="text-gray-500 dark:text-gray-400">Aucun commentaire pour le moment.</p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Messages{% endblock %}
+{% block title %}Messages
+{% endblock %}
 
 {% block body %}
-    <h1 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Tous les messages</h1>
-
-    <a href="{{ path('message_add') }}" class="bg-green-600 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-green-700">+ Nouveau message</a>
-
-    <div>
-        {% for message in messages %}
-            {% include 'partials/_card.html.twig' with { message: message } %}
-        {% else %}
-            <p>Aucun message pour l’instant.</p>
-        {% endfor %}
-    </div>
+		<div class="flex flex-left m-4 gap-4">
+			<h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tous les messages</h1>
+			<a href="{{ path('message_add') }}" class="bg-green-600 text-white px-4 py-2 rounded mb-4 hover:bg-green-700">+ Nouveau message</a>
+		</div>
+		<div class="grid gap-4 lg:grid-cols-4">
+			{% for message in messages %}
+				{% include 'partials/_card.html.twig' with { message: message } %}
+			{% else %}
+				<p>Aucun message pour l’instant.</p>
+			{% endfor %}
+		</div>
 {% endblock %}

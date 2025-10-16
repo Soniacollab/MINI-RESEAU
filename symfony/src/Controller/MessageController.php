@@ -6,14 +6,20 @@ use App\Entity\Comment;
 use App\Entity\Message;
 use App\Form\CommentType;
 use App\Form\MessageType;
+use App\Repository\CommentRepository;
 use App\Repository\MessageRepository;
 use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Mailer\Messenger\SendEmailMessage;
+
 use DateTimeImmutable;
 
 #[Route('/messages', name: 'message_')]
@@ -47,10 +53,17 @@ class MessageController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Route('/add', name: 'add')]
     #[IsGranted('ROLE_USER')]
-    public function addMessage(Request $request, EntityManagerInterface $em, ImageUploader $imageUploader): Response
-    {
+    public function addMessage(
+        Request $request,
+        EntityManagerInterface $em,
+        ImageUploader $imageUploader,
+        MessageBusInterface $messageBus
+    ): Response {
         $message = new Message();
         $message->setAuthor($this->getUser());
 
@@ -59,9 +72,11 @@ class MessageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setCreatedAt(new DateTimeImmutable());
-
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
+                if ($message->getImage()) {
+                    $imageUploader->deleteFile($message->getImage());
+                }
                 $fileName = $imageUploader->uploadCover($imageFile, substr($message->getContent(), 0, 20));
                 $message->setImage($fileName);
             }
@@ -69,7 +84,16 @@ class MessageController extends AbstractController
             $em->persist($message);
             $em->flush();
 
-            $this->addFlash('success', 'Message publié avec succès !');
+            // Envoi du mail via Symfony Mailer (config MAILER_DSN)
+            $email = (new Email())
+                ->from('from@example.org')               // Adresse générique
+                ->to($this->getUser()->getEmail())
+                ->subject('Nouveau message posté !')
+                ->text('Ton message a bien été publié sur Mini-Réseau !');
+
+            // envoyer via Messenger
+            $messageBus->dispatch(new SendEmailMessage($email));
+
 
             return $this->redirectToRoute('message_list');
         }
@@ -79,6 +103,7 @@ class MessageController extends AbstractController
             'message' => $message,
         ]);
     }
+
 
     #[Route('/edit/{id}', name: 'edit')]
     #[IsGranted('ROLE_USER')]
@@ -99,6 +124,7 @@ class MessageController extends AbstractController
                 $message->setImage($fileName);
             }
 
+            $message->setUpdatedAt(new DateTimeImmutable());
             $em->flush();
 
             $this->addFlash('success', 'Message modifié avec succès !');
@@ -131,7 +157,7 @@ class MessageController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show')]
-    public function showMessage(Message $message, Request $request, EntityManagerInterface $em, \App\Repository\CommentRepository $commentRepository): Response
+    public function showMessage(Message $message, Request $request, EntityManagerInterface $em, CommentRepository $commentRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -145,7 +171,7 @@ class MessageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setCreatedAt(new \DateTimeImmutable());
+            $comment->setCreatedAt(new DateTimeImmutable());
             $em->persist($comment);
             $em->flush();
 

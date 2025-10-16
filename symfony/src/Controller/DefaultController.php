@@ -13,9 +13,13 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'default_home', methods: ['GET'])]
     public function home(MessageRepository $messageRepository): Response
     {
-        $messages = $messageRepository->findAll();
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
 
-        return $this->render('default/home.html.twig', [
+        $messages = $messageRepository->findBy([], ['createdAt' => 'DESC']);
+
+        return $this->render('message/message.html.twig', [
             'messages' => $messages,
         ]);
     }

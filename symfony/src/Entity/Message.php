@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
+#[ORM\HasLifecycleCallbacks] // 👈 Nécessaire pour les événements automatiques
 class Message
 {
     #[ORM\Id]
@@ -34,6 +35,9 @@ class Message
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null; // 👈 Nouvelle propriété
+
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
@@ -48,6 +52,8 @@ class Message
     {
         $this->comments = new ArrayCollection();
     }
+
+    // === GETTERS & SETTERS ===
 
     public function getId(): ?int
     {
@@ -87,6 +93,17 @@ class Message
         return $this;
     }
 
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
     public function getAuthor(): ?User
     {
         return $this->author;
@@ -103,9 +120,7 @@ class Message
      */
     public function getComments(): Collection
     {
-        // Retourne les commentaires triés par createdAt décroissant
-        return $this->comments->toArray() ?
-            $this->comments->toArray() : new ArrayCollection();
+        return $this->comments;
     }
 
     public function addComment(Comment $comment): static
@@ -114,7 +129,6 @@ class Message
             $this->comments->add($comment);
             $comment->setMessage($this);
         }
-
         return $this;
     }
 
@@ -125,7 +139,6 @@ class Message
                 $comment->setMessage(null);
             }
         }
-
         return $this;
     }
 
@@ -138,5 +151,21 @@ class Message
     {
         $this->image = $image;
         return $this;
+    }
+
+    // === ÉVÉNEMENTS AUTOMATIQUES ===
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

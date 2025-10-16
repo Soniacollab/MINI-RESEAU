@@ -12,6 +12,19 @@ services:
       DB_PASS: password
       DB_NAME: mini_reseau
       COMPOSER_ALLOW_SUPERUSER: "1"
+      MAILER_DSN: smtp://mailhog:1025
+    restart: unless-stopped
+
+  messenger_worker:
+    container_name: mini_reseau_worker
+    build:
+      context: ./docker/php
+    working_dir: /var/www/html
+    volumes:
+      - ./symfony:/var/www/html
+    command: php bin/console messenger:consume async -vv
+    depends_on:
+      - db
     restart: unless-stopped
 
   web:

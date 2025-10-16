@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Repository\CommentRepository;
+use App\Form\CommentType;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -13,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/comments', name: 'comment_')]
 class CommentController extends AbstractController
 {
-    // 🔒 Vérifie que l'utilisateur est l'auteur ou admin
+    // Vérifie que l'utilisateur est l'auteur ou admin
     private function denyAccessIfNotOwnerOrAdmin(Comment $comment): void
     {
         $currentUser = $this->getUser();
@@ -28,17 +30,18 @@ class CommentController extends AbstractController
         }
     }
 
-    // ✏️ Modifier un commentaire
+    // Modifier un commentaire
     #[Route('/edit/{id}', name: 'edit')]
     #[IsGranted('ROLE_USER')]
-    public function editComment(Comment $comment, CommentRepository $commentRepository, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function editComment(Comment $comment, EntityManagerInterface $em, Request $request): Response
     {
         $this->denyAccessIfNotOwnerOrAdmin($comment);
 
-        $form = $this->createForm(\App\Form\CommentType::class, $comment);
+        $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setUpdatedAt(new DateTimeImmutable());
             $em->flush();
             $this->addFlash('success', 'Commentaire modifié avec succès !');
 
@@ -47,10 +50,7 @@ class CommentController extends AbstractController
             ]);
         }
 
-        // Récupérer les commentaires triés par date décroissante
-        $comments = $commentRepository->findBy(['message' => $message], ['createdAt' => 'DESC']);
-
-        // 👉 Affiche le formulaire si pas encore soumis
+        //  Affiche le formulaire si pas encore soumis
         return $this->render('comment/edit.html.twig', [
             'form' => $form->createView(),
             'comment' => $comment,
@@ -58,7 +58,7 @@ class CommentController extends AbstractController
     }
 
 
-    // 🗑️ Supprimer un commentaire
+    // Supprimer un commentaire
     #[Route('/delete/{id}', name: 'delete')]
     #[IsGranted('ROLE_USER')]
     public function deleteComment(Comment $comment, EntityManagerInterface $em): Response

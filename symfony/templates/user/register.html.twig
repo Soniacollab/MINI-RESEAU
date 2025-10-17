@@ -1,29 +1,60 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Créer un nouveau compte{% endblock %}
+{% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-    <main>
-        <!-- Titre de la page -->
-        <div class="p-3 mx-auto text-center">
-            <h1 class="display-4">Créer un nouveau compte</h1>
-        </div>
+<div class="bg-purple-200 dark:bg-gray-900 min-h-screen flex flex-col items-center justify-center py-10">
 
-        <!-- Contenu de la page -->
-        <div class="py-5 bg-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-8 mx-auto">
-                        {{ form_start(form, {'attr': {'novalidate':'novalidate'}}) }}
-
-                        {{ form_row(form.email) }}
-                        {{ form_row(form.password.first, {'label': 'Mot de passe'}) }}
-                        {{ form_row(form.password.second, {'label': 'Confirmer le mot de passe'}) }}
-                        {{ form_end(form) }}
-
-                    </div>
+    {# Affichage des messages flash #}
+    <div class="w-full max-w-md mx-auto mb-4">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-2 p-3 rounded {{ label == 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                    {{ message }}
                 </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <form method="post" class="mx-auto p-6 rounded-lg shadow-lg w-full max-w-md bg-white dark:bg-gray-800">
+        <h1 class="font-bold text-2xl mb-8 text-center text-gray-900 dark:text-gray-100">
+            Créer un nouveau compte
+        </h1>
+
+        {# Champs simples #}
+        {% for field in [form.firstname, form.lastname, form.email] %}
+            <div class="mb-4">
+                {{ form_label(field, null, {'label_attr': {'class': 'block mb-1 font-semibold text-gray-700 dark:text-gray-200'}}) }}
+                {{ form_widget(field, {'attr': {'class': 'w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600'}}) }}
+                {{ form_errors(field) }}
             </div>
+        {% endfor %}
+
+        {# Champs RepeatedType pour le mot de passe #}
+        <div class="mb-4">
+            {{ form_label(form.plainPassword.first, null, {'label_attr': {'class': 'block mb-1 font-semibold text-gray-700 dark:text-gray-200'}}) }}
+            {{ form_widget(form.plainPassword.first, {'attr': {'class': 'w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600'}}) }}
+            {{ form_errors(form.plainPassword.first) }}
         </div>
-    </main>
+
+        <div class="mb-4">
+            {{ form_label(form.plainPassword.second, null, {'label_attr': {'class': 'block mb-1 font-semibold text-gray-700 dark:text-gray-200'}}) }}
+            {{ form_widget(form.plainPassword.second, {'attr': {'class': 'w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600'}}) }}
+            {{ form_errors(form.plainPassword.second) }}
+        </div>
+
+        {# Bouton submit #}
+        <div class="mt-6">
+            {{ form_widget(form.submit, {'attr': {'class': 'w-full bg-purple-300 hover:bg-purple-500 text-white font-semibold py-2 rounded shadow-lg'}}) }}
+        </div>
+
+        {{ form_end(form) }}
+    </form>
+
+    {# Lien connexion #}
+    <p class="mt-4 text-sm text-gray-700 dark:text-gray-200 text-center">
+        Déjà inscrit ? <a href="{{ path('app_login') }}" class="text-purple-600 dark:text-purple-400 underline">Connectez-vous</a>
+    </p>
+
+</div>
 {% endblock %}

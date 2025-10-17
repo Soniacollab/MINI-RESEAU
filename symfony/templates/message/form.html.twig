@@ -1,0 +1,70 @@
+{# templates/message/form.html.twig #}
+{% extends 'base.html.twig' %}
+
+
+
+{% block title %}
+    {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.previewImage = function(event) {
+                const input = event.target;
+                const preview = document.getElementById('imagePreview');
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+<div class="bg-purple-200 dark:bg-gray-900 min-h-screen flex items-center justify-center py-10">
+    
+    <form method="post" class="w-full max-w-md bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg" enctype="multipart/form-data">
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-gray-100">
+            {{ message.id ? 'Modifier le message' : 'Publier un message' }}
+        </h1>
+
+        <div class="space-y-4">
+            {# Champs du formulaire #}
+            {% for field in [form.title, form.content, form.image] %}
+                <div>
+                    {{ form_label(field, null, {'label_attr': {'class': 'block mb-1 font-semibold text-gray-700 dark:text-gray-200'}}) }}
+                    {{ form_widget(field, {'attr': {'class': 'w-full border rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600', 
+                        'onchange': field.vars.name == 'image' ? 'previewImage(event)' : '' }}) }}
+                    {{ form_errors(field) }}
+                </div>
+            {% endfor %}
+
+            {# Prévisualisation de l'image #}
+            <div class="text-center">
+                <img id="imagePreview"
+                     src="{{ message.image ? asset('uploads/' ~ message.image) : '' }}"
+                     alt="Prévisualisation de l'image"
+                     class="mx-auto rounded max-h-64 object-cover"
+                     style="display: {{ message.image ? 'block' : 'none' }}">
+            </div>
+        </div>
+
+        <div class="mt-6">
+            {{ form_widget(form.submit, {'attr': {'class': 'w-full bg-purple-300 hover:bg-purple-500 text-white font-semibold py-2 rounded shadow-lg transition'}}) }}
+        </div>
+
+        {{ form_end(form) }}
+    </form>
+</div>
+{% endblock %}

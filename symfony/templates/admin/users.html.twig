@@ -1,31 +1,67 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
 
 {% block body %}
-<table>
-    <thead>
-    <tr>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Rôle</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for user in users %}
-        <tr>
-            <td>{{ user.firstname }} {{ user.lastname }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.roles|join(', ') }}</td>
-            <td>
-                {% if app.user.id != user.id %}
-                    <a href="{{ path('admin_user_delete', {'id': user.id}) }}"
-                       onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
-                        Supprimer
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="min-h-screen p-6 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    {# Flash messages #}
+    <div class="w-full max-w-4xl mx-auto mb-6">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-3 p-4 rounded-lg shadow transition
+                    {{ label == 'success'
+                        ? 'bg-green-200 text-green-900 dark:bg-green-700 dark:text-green-100'
+                        : 'bg-red-200 text-red-900 dark:bg-red-700 dark:text-red-100' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Gestion des utilisateurs</h1>
+            <a href="{{ path('admin_user_new') }}"
+               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow">
+                + Ajouter
+            </a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left border border-gray-200 dark:border-gray-700 rounded-lg">
+                <thead class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
+                    <tr>
+                        <th class="px-6 py-3">Nom</th>
+                        <th class="px-6 py-3">Email</th>
+                        <th class="px-6 py-3">Rôle</th>
+                        <th class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for user in users %}
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            <td class="px-6 py-3">{{ user.firstname }} {{ user.lastname }}</td>
+                            <td class="px-6 py-3">{{ user.email }}</td>
+                            <td class="px-6 py-3">{{ user.roles|join(', ') }}</td>
+                            <td class="px-6 py-3 flex gap-3">
+                                <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="text-blue-500 hover:underline">Modifier</a>
+                                {% if app.user.id != user.id %}
+                                    <a href="{{ path('admin_user_delete', {'id': user.id}) }}"
+                                       class="text-red-500 hover:underline"
+                                       onclick="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                                        Supprimer
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-6 text-gray-500 dark:text-gray-300">Aucun utilisateur trouvé.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

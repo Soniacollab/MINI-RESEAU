@@ -27,19 +27,31 @@ class UserController extends AbstractController
             ->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $user->getPassword())
-            );
+            // Vérifier si l'email existe déjà
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy([
+                'email' => $user->getEmail()
+            ]);
 
+            if ($existingUser) {
+                $this->addFlash('danger', 'Cet email est déjà utilisé.');
+                return $this->render('user/register.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
+
+            // Hash du mot de passe
+            $plainPassword = $form->get('plainPassword')->getData();
+            $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', "Inscription réusssie ! Vous pouvez vous connecter.");
-
+            $this->addFlash('success', "Inscription réussie ! Vous pouvez vous connecter.");
             return $this->redirectToRoute('app_login');
         }
+
+
 
         return $this->render('user/register.html.twig', [
             'form' => $form->createView()

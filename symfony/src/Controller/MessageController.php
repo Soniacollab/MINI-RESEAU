@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mailer\Messenger\SendEmailMessage;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use DateTimeImmutable;
 
@@ -39,19 +40,6 @@ class MessageController extends AbstractController
         }
     }
 
-    #[Route('/', name: 'list')]
-    public function listMessages(MessageRepository $messageRepository): Response
-    {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        $messages = $messageRepository->findBy([], ['createdAt' => 'DESC']);
-
-        return $this->render('message/message.html.twig', [
-            'messages' => $messages,
-        ]);
-    }
 
     /**
      * @throws ExceptionInterface
@@ -84,24 +72,36 @@ class MessageController extends AbstractController
             $em->persist($message);
             $em->flush();
 
-            // Envoi du mail via Symfony Mailer (config MAILER_DSN)
-            $email = (new Email())
-                ->from('from@example.org')               // Adresse générique
-                ->to($this->getUser()->getEmail())
-                ->subject('Nouveau message posté !')
-                ->text('Ton message a bien été publié sur Mini-Réseau !');
+            
+        // $post est l'entité du message/post qui vient d'être créé
+        $email = (new Email())
+            ->from('no-reply@mini-reseau.com')           // Adresse générique
+            ->to($this->getUser()->getEmail())
+            ->subject('Nouveau message publié !')
+            ->html(sprintf(
+                '<p>Bonjour %s,</p>
+                <p>Un nouveau message a été publié par <strong>%s</strong> :</p>
+                <blockquote>%s</blockquote>
+                <p><a href="%s">Voir le message en ligne</a></p>',
+                $this->getUser()->getFirstname(),
+                $message->getAuthor()->getFirstname(),
+                nl2br(htmlspecialchars($message->getContent())),
+                $this->generateUrl('message_show', ['id' => $message->getId()], UrlGeneratorInterface::ABSOLUTE_URL)
+            ));
+
 
             // envoyer via Messenger
             $messageBus->dispatch(new SendEmailMessage($email));
 
 
-            return $this->redirectToRoute('message_list');
+            return $this->redirectToRoute('default_home');
         }
 
-        return $this->render('message/add.html.twig', [
+        return $this->render('message/form.html.twig', [
             'form' => $form->createView(),
             'message' => $message,
         ]);
+
     }
 
 
@@ -129,10 +129,10 @@ class MessageController extends AbstractController
 
             $this->addFlash('success', 'Message modifié avec succès !');
 
-            return $this->redirectToRoute('message_list');
+            return $this->redirectToRoute('default_home');
         }
 
-        return $this->render('message/add.html.twig', [
+        return $this->render('message/form.html.twig', [
             'form' => $form->createView(),
             'message' => $message,
         ]);
@@ -153,10 +153,11 @@ class MessageController extends AbstractController
 
         $this->addFlash('success', 'Message supprimé avec succès !');
 
-        return $this->redirectToRoute('message_list');
+        return $this->redirectToRoute('default_home');
     }
 
     #[Route('/{id}', name: 'show')]
+    #[IsGranted('ROLE_USER')]
     public function showMessage(Message $message, Request $request, EntityManagerInterface $em, CommentRepository $commentRepository): Response
     {
         if (!$this->getUser()) {

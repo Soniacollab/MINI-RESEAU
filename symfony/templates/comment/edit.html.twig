@@ -1,8 +1,20 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Modifier le commentaire{% endblock %}
 
 {% block body %}
+
+{# Affichage des messages flash #}
+    <div class="w-full max-w-md mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadowdark:bg-gray-700">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-2 p-3 rounded {{ label == 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     <div class="max-w-lg mx-auto mt-10">
         <h2 class="text-xl font-bold mb-4">Modifier ton commentaire</h2>
 

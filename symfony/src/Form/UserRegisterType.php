@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class UserRegisterType extends AbstractType
 {
@@ -29,17 +31,25 @@ class UserRegisterType extends AbstractType
                 'label' => 'Email',
                 'attr' => ['placeholder' => 'Saisissez votre e-mail']
             ])
-            ->add('password', RepeatedType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'mapped' => false, // IMPORTANT ! Ne pas mapper sur l'entité
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
-                'first_options'  => [
+                'first_options' => [
                     'label' => 'Mot de passe',
-                    'attr' => ['placeholder' => 'Saisissez votre mot de passe']
+                    'attr' => ['placeholder' => 'Saisissez votre mot de passe'],
+                    'constraints' => [
+                        new NotBlank(['message' => 'Le mot de passe est obligatoire.']),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
+                        ])
+                    ]
                 ],
                 'second_options' => [
                     'label' => 'Confirmez le mot de passe',
                     'attr' => ['placeholder' => 'Confirmez votre mot de passe']
-                ],
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider mon inscription',

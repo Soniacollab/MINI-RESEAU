@@ -3,6 +3,19 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
+{# Affichage des messages flash #}
+    <div class="w-full max-w-md mx-auto mb-6">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-3 p-3 rounded shadow transition
+                    {{ label == 'success' 
+                        ? 'bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100' 
+                        : 'bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     <div class="bg-purple-200 dark:bg-gray-900 min-h-screen flex items-center justify-center py-10">
 
         <form method="post" class="mx-auto p-6 rounded-lg shadow-lg w-full max-w-md bg-white dark:bg-gray-800">

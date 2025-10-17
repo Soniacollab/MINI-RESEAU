@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[ORM\HasLifecycleCallbacks] // 👈 Nécessaire pour les événements automatiques
+#[ORM\HasLifecycleCallbacks] //  Nécessaire pour les événements automatiques
 class Message
 {
     #[ORM\Id]
@@ -36,7 +36,7 @@ class Message
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null; // 👈 Nouvelle propriété
+    private ?\DateTimeInterface $updatedAt = null; 
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]

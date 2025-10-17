@@ -1,38 +1,76 @@
-<nav class="bg-black p-4 text-gray-200 text-sm md:text-base lg:text-lg">
-    <div class="flex justify-between items-center">
-        <a href="{{ path('default_home') }}" class="font-bold text-white">Mini-Réseau</a>
+<nav class="bg-black text-gray-200 text-sm md:text-base lg:text-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
 
-        <div id="navbarNav">
-            <ul class="flex gap-4 items-center">
-                {% if app.user %}
-                    <li>
-                        <a href="{{ path('default_home') }}" class="hover:text-purple-400">Accueil</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('message_add') }}" class="hover:text-purple-400">Rédiger un post</a>
-                    </li>
+            {# Logo #}
+            <div class="flex-shrink-0">
+                <a href="{{ path('default_home') }}" class="font-bold text-white text-lg md:text-xl">Mini-Réseau</a>
+            </div>
 
-                    {% if 'ROLE_ADMIN' in app.user.roles %}
-                        <li>
-                            <a href="{{ path('admin_users') }}" class="hover:text-purple-400">Gérer les utilisateurs</a>
-                        </li>
+            {# Bouton menu mobile #}
+            <div class="flex md:hidden">
+                <button id="mobile-menu-button" class="text-gray-200 hover:text-purple-400 focus:outline-none">
+                    ☰
+                </button>
+            </div>
+
+            {# Menu principal #}
+            <div class="hidden md:flex md:items-center md:gap-6">
+                <ul class="flex gap-4 items-center">
+                    {% if app.user %}
+                        <li><a href="{{ path('default_home') }}" class="hover:text-purple-400">Accueil</a></li>
+                        <li><a href="{{ path('message_add') }}" class="hover:text-purple-400">Rédiger un post</a></li>
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <li><a href="{{ path('admin_users') }}" class="hover:text-purple-400">Gérer les utilisateurs</a></li>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                    <li>
+                        <button id="toggleDarkMode" type="button" class="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm" aria-label="Basculer thème" title="Basculer thème">
+                            🌗
+                        </button>
+                    </li>
+                    {% if app.user %}
+                        <li><a href="{{ path('app_logout') }}" class="hover:text-purple-400">Déconnexion</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
 
+        {# Menu mobile caché par défaut #}
+        <div id="mobile-menu" class="md:hidden hidden mt-2">
+            <ul class="flex flex-col gap-2">
+                {% if app.user %}
+                    <li><a href="{{ path('default_home') }}" class="block px-3 py-2 hover:text-purple-400">Accueil</a></li>
+                    <li><a href="{{ path('message_add') }}" class="block px-3 py-2 hover:text-purple-400">Rédiger un post</a></li>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <li><a href="{{ path('admin_users') }}" class="block px-3 py-2 hover:text-purple-400">Gérer les utilisateurs</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('app_logout') }}" class="block px-3 py-2 hover:text-purple-400">Déconnexion</a></li>
+                {% endif %}
                 <li>
-                    <button id="toggleDarkMode" type="button" class="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm" aria-label="Basculer thème" title="Basculer thème">
-                        🌗
+                    <button id="mobile-toggle-dark" type="button" class="px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-sm w-full">
+                        🌗 Basculer thème
                     </button>
                 </li>
             </ul>
         </div>
-
-        <ul class="flex gap-4 items-center">
-            {% if app.user %}
-                <li>
-                    <a href="{{ path('app_logout') }}" class="hover:text-purple-400">Déconnexion</a>
-                </li>
-            {% endif %}
-        </ul>
     </div>
 </nav>
+
+{# Script pour toggle menu mobile #}
+<script>
+    const btn = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+
+    // Option : bascule DarkMode sur mobile
+    const mobileDark = document.getElementById('mobile-toggle-dark');
+    if (mobileDark) {
+        mobileDark.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    }
+</script>

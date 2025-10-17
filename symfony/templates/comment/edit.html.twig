@@ -1,25 +1,46 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Modifier le commentaire{% endblock %}
 
 {% block body %}
+<div class="min-h-screen flex flex-col items-center justify-start py-10 bg-gray-50 dark:bg-gray-900">
 
-{# Affichage des messages flash #}
-    <div class="w-full max-w-md mx-auto mb-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadowdark:bg-gray-700">
+    {# Affichage des messages flash #}
+    <div class="w-full max-w-md mx-auto mb-6">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="mb-2 p-3 rounded {{ label == 'success' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                <div class="mb-3 p-3 rounded shadow transition
+                    {{ label == 'success' 
+                        ? 'bg-green-200 text-green-800 dark:bg-green-700 dark:text-green-100' 
+                        : 'bg-red-200 text-red-800 dark:bg-red-700 dark:text-red-100' }}">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endfor %}
     </div>
-    <div class="max-w-lg mx-auto mt-10">
-        <h2 class="text-xl font-bold mb-4">Modifier ton commentaire</h2>
+
+    <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100 text-center">Modifier ton commentaire</h2>
 
         {{ form_start(form) }}
-        {{ form_widget(form.content, {'attr': {'class': 'w-full border rounded p-2'}}) }}
+        <div class="mb-4">
+            {{ form_widget(form.content, {
+                'attr': {
+                    'class': 'w-full border border-gray-300 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:outline-none transition',
+                    'placeholder': 'Écris ton commentaire ici...'
+                }
+            }) }}
+            {{ form_errors(form.content) }}
+        </div>
+
+        <div class="flex justify-center">
+            {{ form_widget(form.submit, {
+                'attr': {
+                    'class': 'bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg shadow-lg transition'
+                }
+            }) }}
+        </div>
         {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
